@@ -380,7 +380,13 @@ class AlertRecipient(models.Model):
     class Meta:
         ordering = ['name']
 
-    def notify(self, subject, message, pushover_priority):
+    # priority of the alert.  These numbers correspond to priority levels in Pushover.
+    PRIORITY_LOW = '-1'
+    PRIORITY_NORMAL = '0'
+    PRIORITY_HIGH = '1'
+    PRIORITY_EMERGENCY = '2'
+
+    def notify(self, subject, message, pushover_priority=PRIORITY_NORMAL):
         '''If this recipient is active, sends a message to the recipient via each
          of the enabled communication means.  'subject' is the subject line of the
          message, and 'message' is the message.  For the Pushover notification
@@ -430,7 +436,7 @@ class AlertRecipient(models.Model):
                 if resp['status'] != 0:
                     msgs_sent += 1
                 else:
-                    _logger.exception(', '.join(resp['errors']))
+                    _logger.exception('Pushover Error: ' + ', '.join(resp['errors']))
 
             else:
                 _logger.exception('No Pushover API Token Key configured in Settings file.')
@@ -471,20 +477,16 @@ class AlertCondition(models.Model):
     alert_message = models.TextField(max_length=200, blank=True, 
         help_text='If left blank, a message will be created automatically.')
 
-    # priority of the alert.  These numbers correspond to priority levels in Pushover.
-    PRIORITY_LOW = '-1'
-    PRIORITY_NORMAL = '0'
-    PRIORITY_HIGH = '1'
-    PRIORITY_EMERGENCY = '2'
     ALERT_PRIORITY_CHOICES = (
-        (PRIORITY_LOW, 'Low'), 
-        (PRIORITY_NORMAL, 'Normal'),
-        (PRIORITY_HIGH, 'High'),
-        (PRIORITY_EMERGENCY, 'Emergency')
+        (AlertRecipient.PRIORITY_LOW, 'Low'), 
+        (AlertRecipient.PRIORITY_NORMAL, 'Normal'),
+        (AlertRecipient.PRIORITY_HIGH, 'High'),
+        (AlertRecipient.PRIORITY_EMERGENCY, 'Emergency')
     )
+
     priority = models.CharField('Priority of this Alert Situation', max_length=5, 
         choices=ALERT_PRIORITY_CHOICES,
-        default=PRIORITY_NORMAL)
+        default=AlertRecipient.PRIORITY_NORMAL)
 
     # determines delay before notifying again about this condition.  Expressed in hours.
     wait_before_next = models.FloatField('Hours to Wait before Notifying Again', default=4.0)

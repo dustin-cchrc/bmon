@@ -19,6 +19,7 @@ urlpatterns = patterns('bmsapp.views',
     url(r'^chart_sensor_list/(\d+)/(\d+)/$', 'chart_sensor_list'),
     url(r'^map_json/$', 'map_json', name='map-json'),
     url(r'^training/video/(\w+)/(\d+)/(\d+)/$', 'show_video', name='show-video'),
+    url(r'^test_notify/(\d+)/$', 'test_notify'),
     url(r'^make_store_key/$', 'make_store_key'),
 
     # catches URLs that don't match the above patterns.  Assumes they give a template name to render.

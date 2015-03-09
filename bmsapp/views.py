@@ -285,6 +285,15 @@ def map_json(request):
 
     return HttpResponse(json.dumps(ret), content_type="application/json")
 
+def test_notify(request, alert_recipient_id):
+    '''Sends a test notification to a paricular alert recipient.
+    '''
+    recipient = models.AlertRecipient.objects.get(pk=alert_recipient_id)
+    msgs_sent = recipient.notify('Test Message from Building Monitoring System',
+        'This is a test alert message sent from the Building Monitoring System.')
+    return HttpResponse('''%s Test Alert Messages sent to %s. If errors occurred, error 
+        descriptions can be found at the end of <a href="/show_log/">this page</a>.''' % (msgs_sent, recipient.name))
+
 def wildcard(request, template_name):
     '''
     Used if a URL component doesn't match any of the predefied URL patterns.  Renders
