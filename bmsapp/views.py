@@ -285,6 +285,7 @@ def map_json(request):
 
     return HttpResponse(json.dumps(ret), content_type="application/json")
 
+@login_required
 def test_notify(request, alert_recipient_id):
     '''Sends a test notification to a paricular alert recipient.
     '''
