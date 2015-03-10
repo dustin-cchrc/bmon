@@ -29,6 +29,10 @@ TMPL_CONTEXT = {'bmsapp_title_text': getattr(settings, 'BMSAPP_TITLE_TEXT', 'Fac
                 'bmsapp_nav_links': getattr(settings, 'BMSAPP_NAV_LINKS', DEFAULT_NAV_LINKS),
                }
 
+# The URL used to log into the Admin site of the BMON application.
+# Used as a parameter in the login_required decorator.
+LOGIN_URL = '/admin/login/'
+
 def base_context():
     '''
     Returns a Template rendering context with some basic variables.
@@ -285,7 +289,7 @@ def map_json(request):
 
     return HttpResponse(json.dumps(ret), content_type="application/json")
 
-@login_required
+@login_required(login_url=LOGIN_URL)
 def test_notify(request, alert_recipient_id):
     '''Sends a test notification to a paricular alert recipient.
     '''
@@ -302,8 +306,7 @@ def wildcard(request, template_name):
     '''
     return render_to_response('bmsapp/%s.html' % template_name, base_context())
 
-@login_required
+@login_required(login_url=LOGIN_URL)
 def password_change_done(request):
     return render_to_response('registration/password_change_done.html',
         {'user': request.user})
-
