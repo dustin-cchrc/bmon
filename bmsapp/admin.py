@@ -2,7 +2,7 @@
 This file configures the Admin interface, which allows for editing of the Models.
 '''
 
-from bmsapp.models import Building, Sensor, SensorGroup, BldgToSensor, DashboardItem, Unit
+from bmsapp.models import Building, Sensor, SensorGroup, BldgToSensor, DashboardItem, Unit, Link
 from bmsapp.models import MultiBuildingChart, ChartBuildingInfo
 from bmsapp.models import BuildingGroup, BuildingMode
 from bmsapp.models import AlertCondition, AlertRecipient
@@ -163,6 +163,11 @@ class SensorGroupAdmin(admin.ModelAdmin):
 class UnitAdmin(admin.ModelAdmin):
     list_display = ('id', 'label', 'measure_type')
     list_editable = ('label', 'measure_type')
+    
+@admin.register(Link)
+class LinksAdmin(admin.ModelAdmin):
+    list_display = ('link_name', 'link_url')
+    list_editable = ('link_name', 'link_url')
 
 
 class ChartBuildingInfoInline(admin.TabularInline):

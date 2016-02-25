@@ -1,3 +1,4 @@
+<!--
 <script>
   $(function() {
     $( document ).tooltip();
@@ -9,6 +10,7 @@
     width: 5em;
   }
   </style>
+-->
 
 
 <h2 id="report_title">{{ report_title }}</h2>
@@ -32,3 +34,8 @@
     {% endfor %}
     </tbody>
 </table>
+<!--
+<h3>{{ building_documentation }}</h3>
+{% for link in link_list %}
+<a href="{{ link.link_url }}"> {{ link.link_name }} </a>
+-->

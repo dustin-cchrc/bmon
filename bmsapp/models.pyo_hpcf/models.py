@@ -153,20 +153,6 @@ class BuildingMode(models.Model):
     class Meta:
         ordering = ['name']
 
-                
-class Link(models.Model):
-    # This class allows administrators to add web-links to a particular building so that users have easy access to diagrams, manuals, etc.
-    
-    link_name = models.CharField("Link title", max_length=80, blank=True, null=True)
-    
-    link_url = models.CharField("Link URL", max_length=300, blank=True, null=True)
-    
-    def __unicode__(self):
-        return self.link_name
-    
-    class Meta: 
-        ordering = ['link_name']
-        
 
 class Building(models.Model):
     '''
@@ -199,14 +185,27 @@ class Building(models.Model):
     sensors = models.ManyToManyField(Sensor, through='BldgToSensor', blank=True, null=True)
 
     # The links to building diagrams, manuals, etc. associated with this building.
-    links = models.ForeignKey(Link, blank=True, null=True)
+    link = models.ForeignKey(Link, verbose_name='Building Web Links')
     
     def __unicode__(self):
         return self.title
 
     class Meta:
         ordering = ['title']
+
         
+class Link(models.Model):
+    # This class allows administrators to add web-links to a particular building so that users have easy access to diagrams, manuals, etc.
+    
+    link_name = models.CharField("Link title", max_length=80, blank=False, null=True)
+    
+    link_url = models.CharField("Link URL", max_length=300, blank=False, null=True)
+    
+    def __unicode__(self):
+        return self.link_name
+    
+    class Meta: 
+        ordering = ['link_name']
 
 class BuildingGroup(models.Model):
     """Defines a group of buildings that the user can select to filter the 

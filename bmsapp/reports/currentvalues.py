@@ -21,6 +21,7 @@ class CurrentValues(basechart.BaseChart):
         cur_group = ''
         cur_group_sensor_list = []
         sensor_list = []
+        link_list = []
         cur_time = time.time()   # needed for calculating how long ago reading occurred
         for b_to_sen in self.building.bldgtosensor_set.all():
             if b_to_sen.sensor_group.title != cur_group:
@@ -42,7 +43,12 @@ class CurrentValues(basechart.BaseChart):
         # add the last group
         if cur_group:
             sensor_list.append( (cur_group, cur_group_sensor_list) )
-
+        
+        for one_link in self.building.links_set.all():
+            link_list.append( {'link_name': one_link.link_name,
+                               'link_url': one_link.link_url
+                               } )
+            
         # context for template
         context = Context( {} )
         
@@ -52,6 +58,12 @@ class CurrentValues(basechart.BaseChart):
         # create a report title
         context['report_title'] = 'Current Values: %s' % self.building.title
 
+        # Create a building documentation header
+        context['building_documentation'] = 'Documentation for %s' % self.building.title
+                
+        # Make the building documentation links available to the template
+        context['link_list'] = link_list
+        
         # template needs building ID.
         context['bldg_id'] = self.bldg_id
 
